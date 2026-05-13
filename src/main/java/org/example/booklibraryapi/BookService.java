@@ -13,7 +13,7 @@ public class BookService {
         return bookRepository.findAll();
     }
     public Book getBookById(Long id){
-        return bookRepository.findById(id).orElse(null);
+        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
     }
     public List<Book> searchByAuthor(String author){
         return bookRepository.findByAuthorContainingIgnoreCase(author);
@@ -28,8 +28,7 @@ public class BookService {
         return bookRepository.save(book);
     }
     public Book updateBook(Long id, Book updatedBook){
-        Book existing = bookRepository.findById(id).orElse(null);
-        if(existing == null) return null;
+        Book existing = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
         existing.setTitle(updatedBook.getTitle());
         existing.setAuthor(updatedBook.getAuthor());
         existing.setDescription(updatedBook.getDescription());
@@ -39,6 +38,10 @@ public class BookService {
         return bookRepository.save(existing);
     }
     public void deleteBook(Long id){
+        bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
         bookRepository.deleteById(id);
+    }
+    public List<Book> findBooksPublishedAfter(int year){
+        return bookRepository.findBooksPublishedAfter(year);
     }
 }

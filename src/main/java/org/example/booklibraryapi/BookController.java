@@ -46,4 +46,9 @@ public class BookController {
     public void deleteBook(@PathVariable Long id){
         bookService.deleteBook(id);
     }
+
+    @GetMapping("/published-after")
+    public List<Book> findBooksPublishedAfter(@RequestParam int year){
+        return bookService.findBooksPublishedAfter(year);
+    }
 }
